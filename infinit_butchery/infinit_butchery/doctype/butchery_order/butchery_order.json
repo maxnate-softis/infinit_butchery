@@ -1,0 +1,286 @@
+{
+    "actions": [],
+    "allow_rename": 1,
+    "creation": "2026-01-26 12:00:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "tenant",
+        "order_type",
+        "status",
+        "column_break_1",
+        "order_date",
+        "outlet",
+        "section_break_customer",
+        "customer",
+        "customer_name",
+        "customer_phone",
+        "customer_email",
+        "section_break_items",
+        "items",
+        "section_break_totals",
+        "subtotal",
+        "discount_amount",
+        "delivery_fee",
+        "column_break_totals",
+        "tax_amount",
+        "grand_total",
+        "section_break_payment",
+        "payment_status",
+        "section_break_delivery",
+        "requires_delivery",
+        "delivery_zone",
+        "delivery_address",
+        "column_break_delivery",
+        "delivery_date",
+        "delivery_time_slot",
+        "delivery_status",
+        "section_break_notes",
+        "notes",
+        "completed_at"
+    ],
+    "fields": [
+        {
+            "fieldname": "tenant",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Tenant",
+            "options": "Tenant",
+            "reqd": 1
+        },
+        {
+            "fieldname": "order_type",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Order Type",
+            "options": "POS\nOnline\nWholesale\nPhone",
+            "reqd": 1
+        },
+        {
+            "default": "Draft",
+            "fieldname": "status",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Status",
+            "options": "Draft\nConfirmed\nProcessing\nReady\nCompleted\nCancelled"
+        },
+        {
+            "fieldname": "column_break_1",
+            "fieldtype": "Column Break"
+        },
+        {
+            "default": "Now",
+            "fieldname": "order_date",
+            "fieldtype": "Datetime",
+            "in_list_view": 1,
+            "label": "Order Date"
+        },
+        {
+            "fieldname": "outlet",
+            "fieldtype": "Link",
+            "label": "Outlet",
+            "options": "Outlet"
+        },
+        {
+            "fieldname": "section_break_customer",
+            "fieldtype": "Section Break",
+            "label": "Customer Details"
+        },
+        {
+            "fieldname": "customer",
+            "fieldtype": "Link",
+            "label": "Customer",
+            "options": "Customer"
+        },
+        {
+            "fieldname": "customer_name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Customer Name"
+        },
+        {
+            "fieldname": "customer_phone",
+            "fieldtype": "Data",
+            "label": "Customer Phone"
+        },
+        {
+            "fieldname": "customer_email",
+            "fieldtype": "Data",
+            "label": "Customer Email",
+            "options": "Email"
+        },
+        {
+            "fieldname": "section_break_items",
+            "fieldtype": "Section Break",
+            "label": "Order Items"
+        },
+        {
+            "fieldname": "items",
+            "fieldtype": "Table",
+            "label": "Items",
+            "options": "Butchery Order Item",
+            "reqd": 1
+        },
+        {
+            "fieldname": "section_break_totals",
+            "fieldtype": "Section Break",
+            "label": "Totals"
+        },
+        {
+            "fieldname": "subtotal",
+            "fieldtype": "Currency",
+            "label": "Subtotal",
+            "read_only": 1
+        },
+        {
+            "fieldname": "discount_amount",
+            "fieldtype": "Currency",
+            "label": "Discount"
+        },
+        {
+            "fieldname": "delivery_fee",
+            "fieldtype": "Currency",
+            "label": "Delivery Fee"
+        },
+        {
+            "fieldname": "column_break_totals",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "tax_amount",
+            "fieldtype": "Currency",
+            "label": "Tax",
+            "read_only": 1
+        },
+        {
+            "bold": 1,
+            "fieldname": "grand_total",
+            "fieldtype": "Currency",
+            "in_list_view": 1,
+            "label": "Grand Total",
+            "read_only": 1
+        },
+        {
+            "fieldname": "section_break_payment",
+            "fieldtype": "Section Break",
+            "label": "Payment"
+        },
+        {
+            "default": "Pending",
+            "fieldname": "payment_status",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "label": "Payment Status",
+            "options": "Pending\nPartial\nPaid\nRefunded"
+        },
+        {
+            "collapsible": 1,
+            "fieldname": "section_break_delivery",
+            "fieldtype": "Section Break",
+            "label": "Delivery Information"
+        },
+        {
+            "default": "0",
+            "fieldname": "requires_delivery",
+            "fieldtype": "Check",
+            "label": "Requires Delivery"
+        },
+        {
+            "depends_on": "requires_delivery",
+            "fieldname": "delivery_zone",
+            "fieldtype": "Link",
+            "label": "Delivery Zone",
+            "options": "Delivery Zone"
+        },
+        {
+            "depends_on": "requires_delivery",
+            "fieldname": "delivery_address",
+            "fieldtype": "Small Text",
+            "label": "Delivery Address"
+        },
+        {
+            "fieldname": "column_break_delivery",
+            "fieldtype": "Column Break"
+        },
+        {
+            "depends_on": "requires_delivery",
+            "fieldname": "delivery_date",
+            "fieldtype": "Date",
+            "label": "Delivery Date"
+        },
+        {
+            "depends_on": "requires_delivery",
+            "fieldname": "delivery_time_slot",
+            "fieldtype": "Data",
+            "label": "Delivery Time Slot"
+        },
+        {
+            "default": "Not Required",
+            "depends_on": "requires_delivery",
+            "fieldname": "delivery_status",
+            "fieldtype": "Select",
+            "label": "Delivery Status",
+            "options": "Not Required\nPending\nScheduled\nIn Transit\nDelivered\nFailed"
+        },
+        {
+            "collapsible": 1,
+            "fieldname": "section_break_notes",
+            "fieldtype": "Section Break",
+            "label": "Notes"
+        },
+        {
+            "fieldname": "notes",
+            "fieldtype": "Text",
+            "label": "Notes"
+        },
+        {
+            "fieldname": "completed_at",
+            "fieldtype": "Datetime",
+            "label": "Completed At",
+            "read_only": 1
+        }
+    ],
+    "index_web_pages_for_search": 1,
+    "links": [],
+    "modified": "2026-01-26 12:00:00.000000",
+    "modified_by": "Administrator",
+    "module": "Infinit Butchery",
+    "name": "Butchery Order",
+    "naming_rule": "Expression",
+    "autoname": "format:{tenant}-ORD-{YYYY}{MM}{DD}-{#####}",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "Butchery Tenant Admin",
+            "share": 1,
+            "write": 1
+        },
+        {
+            "create": 1,
+            "delete": 1,
+            "read": 1,
+            "role": "Butchery Branch Manager",
+            "write": 1
+        },
+        {
+            "create": 1,
+            "read": 1,
+            "role": "Butchery Staff",
+            "write": 1
+        }
+    ],
+    "sort_field": "order_date",
+    "sort_order": "DESC",
+    "track_changes": 1
+}

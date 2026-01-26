@@ -1,0 +1,147 @@
+{
+    "name": "Tenant Payment Method",
+    "module": "Infinit Butchery",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "is_submittable": 0,
+    "istable": 0,
+    "editable_grid": 1,
+    "quick_entry": 0,
+    "track_changes": 1,
+    "naming_rule": "Expression",
+    "autoname": "format:{tenant}-{payment_gateway}",
+    "fields": [
+        {
+            "fieldname": "tenant",
+            "fieldtype": "Link",
+            "label": "Tenant",
+            "options": "Company",
+            "reqd": 1,
+            "in_list_view": 1,
+            "in_standard_filter": 1
+        },
+        {
+            "fieldname": "payment_gateway",
+            "fieldtype": "Link",
+            "label": "Payment Gateway",
+            "options": "Payment Gateway",
+            "reqd": 1,
+            "in_list_view": 1,
+            "in_standard_filter": 1
+        },
+        {
+            "fieldname": "display_name",
+            "fieldtype": "Data",
+            "label": "Display Name",
+            "reqd": 1,
+            "in_list_view": 1
+        },
+        {
+            "fieldname": "is_enabled",
+            "fieldtype": "Check",
+            "label": "Is Enabled",
+            "default": "1",
+            "in_list_view": 1
+        },
+        {
+            "fieldname": "column_break_1",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "gateway_type",
+            "fieldtype": "Data",
+            "label": "Gateway Type",
+            "fetch_from": "payment_gateway.gateway_type",
+            "read_only": 1
+        },
+        {
+            "fieldname": "display_order",
+            "fieldtype": "Int",
+            "label": "Display Order",
+            "default": "10"
+        },
+        {
+            "fieldname": "supports_mobile",
+            "fieldtype": "Check",
+            "label": "Show on Mobile",
+            "default": "1"
+        },
+        {
+            "fieldname": "section_tenant_config",
+            "fieldtype": "Section Break",
+            "label": "Tenant Configuration"
+        },
+        {
+            "fieldname": "merchant_id",
+            "fieldtype": "Data",
+            "label": "Merchant ID",
+            "description": "Tenant-specific merchant identifier"
+        },
+        {
+            "fieldname": "merchant_code",
+            "fieldtype": "Data",
+            "label": "Merchant Code"
+        },
+        {
+            "fieldname": "column_break_config",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "api_key_override",
+            "fieldtype": "Password",
+            "label": "API Key (Override)",
+            "description": "Tenant-specific API key if different from gateway default"
+        },
+        {
+            "fieldname": "api_secret_override",
+            "fieldtype": "Password",
+            "label": "API Secret (Override)"
+        },
+        {
+            "fieldname": "section_limits",
+            "fieldtype": "Section Break",
+            "label": "Transaction Limits"
+        },
+        {
+            "fieldname": "min_amount",
+            "fieldtype": "Currency",
+            "label": "Minimum Amount"
+        },
+        {
+            "fieldname": "max_amount",
+            "fieldtype": "Currency",
+            "label": "Maximum Amount"
+        },
+        {
+            "fieldname": "column_break_limits",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "daily_limit",
+            "fieldtype": "Currency",
+            "label": "Daily Limit"
+        },
+        {
+            "fieldname": "monthly_limit",
+            "fieldtype": "Currency",
+            "label": "Monthly Limit"
+        }
+    ],
+    "permissions": [
+        {
+            "role": "System Manager",
+            "read": 1,
+            "write": 1,
+            "create": 1,
+            "delete": 1
+        },
+        {
+            "role": "Tenant Admin",
+            "read": 1,
+            "write": 1,
+            "create": 1,
+            "delete": 1
+        }
+    ],
+    "links": []
+}

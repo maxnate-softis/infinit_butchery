@@ -1,0 +1,211 @@
+{
+    "name": "Payment Gateway",
+    "module": "Infinit Butchery",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "is_submittable": 0,
+    "istable": 0,
+    "editable_grid": 1,
+    "quick_entry": 0,
+    "track_changes": 1,
+    "naming_rule": "By fieldname",
+    "autoname": "field:gateway_code",
+    "fields": [
+        {
+            "fieldname": "gateway_name",
+            "fieldtype": "Data",
+            "label": "Gateway Name",
+            "reqd": 1,
+            "in_list_view": 1
+        },
+        {
+            "fieldname": "gateway_code",
+            "fieldtype": "Data",
+            "label": "Gateway Code",
+            "reqd": 1,
+            "unique": 1,
+            "in_list_view": 1
+        },
+        {
+            "fieldname": "gateway_type",
+            "fieldtype": "Select",
+            "label": "Gateway Type",
+            "options": "mobile_money\ncard\nbank\ncash\nother",
+            "reqd": 1,
+            "in_list_view": 1,
+            "in_standard_filter": 1
+        },
+        {
+            "fieldname": "is_active",
+            "fieldtype": "Check",
+            "label": "Is Active",
+            "default": "1",
+            "in_list_view": 1
+        },
+        {
+            "fieldname": "column_break_1",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "handler_module",
+            "fieldtype": "Data",
+            "label": "Handler Module",
+            "description": "Python module path for payment handler (e.g., infinit_butchery.payments.airtel_money)"
+        },
+        {
+            "fieldname": "logo",
+            "fieldtype": "Attach Image",
+            "label": "Logo"
+        },
+        {
+            "fieldname": "section_api",
+            "fieldtype": "Section Break",
+            "label": "API Configuration"
+        },
+        {
+            "fieldname": "api_base_url",
+            "fieldtype": "Data",
+            "label": "API Base URL"
+        },
+        {
+            "fieldname": "api_version",
+            "fieldtype": "Data",
+            "label": "API Version",
+            "default": "v1"
+        },
+        {
+            "fieldname": "sandbox_mode",
+            "fieldtype": "Check",
+            "label": "Sandbox Mode",
+            "default": "1"
+        },
+        {
+            "fieldname": "column_break_api",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "sandbox_url",
+            "fieldtype": "Data",
+            "label": "Sandbox URL"
+        },
+        {
+            "fieldname": "production_url",
+            "fieldtype": "Data",
+            "label": "Production URL"
+        },
+        {
+            "fieldname": "section_auth",
+            "fieldtype": "Section Break",
+            "label": "Authentication",
+            "collapsible": 1
+        },
+        {
+            "fieldname": "auth_type",
+            "fieldtype": "Select",
+            "label": "Authentication Type",
+            "options": "API Key\nOAuth2\nBasic Auth\nCustom"
+        },
+        {
+            "fieldname": "api_key",
+            "fieldtype": "Password",
+            "label": "API Key"
+        },
+        {
+            "fieldname": "api_secret",
+            "fieldtype": "Password",
+            "label": "API Secret"
+        },
+        {
+            "fieldname": "column_break_auth",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "oauth_client_id",
+            "fieldtype": "Data",
+            "label": "OAuth Client ID"
+        },
+        {
+            "fieldname": "oauth_client_secret",
+            "fieldtype": "Password",
+            "label": "OAuth Client Secret"
+        },
+        {
+            "fieldname": "oauth_token_url",
+            "fieldtype": "Data",
+            "label": "Token URL"
+        },
+        {
+            "fieldname": "section_webhook",
+            "fieldtype": "Section Break",
+            "label": "Webhook Configuration",
+            "collapsible": 1
+        },
+        {
+            "fieldname": "webhook_secret",
+            "fieldtype": "Password",
+            "label": "Webhook Secret"
+        },
+        {
+            "fieldname": "webhook_url",
+            "fieldtype": "Data",
+            "label": "Webhook URL",
+            "read_only": 1,
+            "description": "This is auto-generated"
+        },
+        {
+            "fieldname": "section_settings",
+            "fieldtype": "Section Break",
+            "label": "Additional Settings"
+        },
+        {
+            "fieldname": "supports_refund",
+            "fieldtype": "Check",
+            "label": "Supports Refund"
+        },
+        {
+            "fieldname": "supports_partial_payment",
+            "fieldtype": "Check",
+            "label": "Supports Partial Payment"
+        },
+        {
+            "fieldname": "min_amount",
+            "fieldtype": "Currency",
+            "label": "Minimum Amount"
+        },
+        {
+            "fieldname": "max_amount",
+            "fieldtype": "Currency",
+            "label": "Maximum Amount"
+        },
+        {
+            "fieldname": "column_break_settings",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "supported_currencies",
+            "fieldtype": "Small Text",
+            "label": "Supported Currencies",
+            "description": "Comma-separated currency codes (e.g., ZMW,USD)"
+        },
+        {
+            "fieldname": "transaction_fee_percent",
+            "fieldtype": "Percent",
+            "label": "Transaction Fee %"
+        },
+        {
+            "fieldname": "transaction_fee_fixed",
+            "fieldtype": "Currency",
+            "label": "Fixed Transaction Fee"
+        }
+    ],
+    "permissions": [
+        {
+            "role": "System Manager",
+            "read": 1,
+            "write": 1,
+            "create": 1,
+            "delete": 1
+        }
+    ],
+    "links": []
+}

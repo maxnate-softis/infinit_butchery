@@ -1,0 +1,148 @@
+{
+    "name": "Delivery Zone",
+    "module": "Infinit Butchery",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "is_submittable": 0,
+    "istable": 0,
+    "editable_grid": 1,
+    "quick_entry": 1,
+    "track_changes": 1,
+    "naming_rule": "Expression",
+    "autoname": "format:{tenant}-ZONE-{zone_code}",
+    "fields": [
+        {
+            "fieldname": "tenant",
+            "fieldtype": "Link",
+            "label": "Tenant",
+            "options": "Company",
+            "reqd": 1,
+            "in_list_view": 1,
+            "in_standard_filter": 1
+        },
+        {
+            "fieldname": "zone_name",
+            "fieldtype": "Data",
+            "label": "Zone Name",
+            "reqd": 1,
+            "in_list_view": 1
+        },
+        {
+            "fieldname": "zone_code",
+            "fieldtype": "Data",
+            "label": "Zone Code",
+            "reqd": 1
+        },
+        {
+            "fieldname": "is_active",
+            "fieldtype": "Check",
+            "label": "Is Active",
+            "default": "1",
+            "in_list_view": 1
+        },
+        {
+            "fieldname": "column_break_1",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "outlet",
+            "fieldtype": "Link",
+            "label": "Outlet",
+            "options": "Branch",
+            "description": "Branch/outlet that services this zone"
+        },
+        {
+            "fieldname": "delivery_fee",
+            "fieldtype": "Currency",
+            "label": "Delivery Fee",
+            "reqd": 1,
+            "in_list_view": 1
+        },
+        {
+            "fieldname": "min_order_amount",
+            "fieldtype": "Currency",
+            "label": "Minimum Order Amount",
+            "default": "0"
+        },
+        {
+            "fieldname": "section_schedule",
+            "fieldtype": "Section Break",
+            "label": "Delivery Schedule"
+        },
+        {
+            "fieldname": "delivery_days",
+            "fieldtype": "Select",
+            "label": "Delivery Days",
+            "options": "Daily\nWeekdays Only\nWeekends Only\nCustom",
+            "default": "Daily"
+        },
+        {
+            "fieldname": "custom_days",
+            "fieldtype": "Data",
+            "label": "Custom Days",
+            "description": "Comma-separated: Mon,Tue,Wed,Thu,Fri,Sat,Sun",
+            "depends_on": "eval:doc.delivery_days=='Custom'"
+        },
+        {
+            "fieldname": "column_break_schedule",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "cutoff_time",
+            "fieldtype": "Time",
+            "label": "Order Cutoff Time",
+            "description": "Orders after this time are for next delivery day"
+        },
+        {
+            "fieldname": "estimated_delivery_hours",
+            "fieldtype": "Int",
+            "label": "Estimated Delivery Hours",
+            "default": "2"
+        },
+        {
+            "fieldname": "section_coverage",
+            "fieldtype": "Section Break",
+            "label": "Coverage Area"
+        },
+        {
+            "fieldname": "areas",
+            "fieldtype": "Small Text",
+            "label": "Areas Covered",
+            "description": "List of areas/suburbs covered by this zone (one per line)"
+        },
+        {
+            "fieldname": "column_break_coverage",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "postal_codes",
+            "fieldtype": "Small Text",
+            "label": "Postal Codes",
+            "description": "Postal codes covered (one per line)"
+        }
+    ],
+    "permissions": [
+        {
+            "role": "System Manager",
+            "read": 1,
+            "write": 1,
+            "create": 1,
+            "delete": 1
+        },
+        {
+            "role": "Tenant Admin",
+            "read": 1,
+            "write": 1,
+            "create": 1,
+            "delete": 1
+        },
+        {
+            "role": "Branch Manager",
+            "read": 1,
+            "write": 1,
+            "create": 1,
+            "delete": 0
+        }
+    ],
+    "links": []
+}

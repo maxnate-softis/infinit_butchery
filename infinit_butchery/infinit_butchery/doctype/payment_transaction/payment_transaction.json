@@ -1,0 +1,181 @@
+{
+    "name": "Payment Transaction",
+    "module": "Infinit Butchery",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "is_submittable": 0,
+    "istable": 0,
+    "editable_grid": 1,
+    "quick_entry": 0,
+    "track_changes": 1,
+    "naming_rule": "Expression",
+    "autoname": "format:PAY-{tenant}-.{YYYY}.-.#####",
+    "fields": [
+        {
+            "fieldname": "tenant",
+            "fieldtype": "Link",
+            "label": "Tenant",
+            "options": "Company",
+            "reqd": 1,
+            "in_list_view": 1,
+            "in_standard_filter": 1
+        },
+        {
+            "fieldname": "payment_gateway",
+            "fieldtype": "Link",
+            "label": "Payment Gateway",
+            "options": "Payment Gateway",
+            "reqd": 1,
+            "in_list_view": 1,
+            "in_standard_filter": 1
+        },
+        {
+            "fieldname": "status",
+            "fieldtype": "Select",
+            "label": "Status",
+            "options": "Initiated\nPending\nCompleted\nFailed\nRefunded\nCancelled",
+            "default": "Initiated",
+            "reqd": 1,
+            "in_list_view": 1,
+            "in_standard_filter": 1
+        },
+        {
+            "fieldname": "column_break_1",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "amount",
+            "fieldtype": "Currency",
+            "label": "Amount",
+            "reqd": 1,
+            "in_list_view": 1
+        },
+        {
+            "fieldname": "currency",
+            "fieldtype": "Link",
+            "label": "Currency",
+            "options": "Currency",
+            "default": "ZMW"
+        },
+        {
+            "fieldname": "section_reference",
+            "fieldtype": "Section Break",
+            "label": "Reference"
+        },
+        {
+            "fieldname": "reference_doctype",
+            "fieldtype": "Link",
+            "label": "Reference DocType",
+            "options": "DocType"
+        },
+        {
+            "fieldname": "reference_name",
+            "fieldtype": "Dynamic Link",
+            "label": "Reference Name",
+            "options": "reference_doctype"
+        },
+        {
+            "fieldname": "column_break_ref",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "customer_phone",
+            "fieldtype": "Data",
+            "label": "Customer Phone"
+        },
+        {
+            "fieldname": "customer_email",
+            "fieldtype": "Data",
+            "label": "Customer Email"
+        },
+        {
+            "fieldname": "section_gateway",
+            "fieldtype": "Section Break",
+            "label": "Gateway Details"
+        },
+        {
+            "fieldname": "gateway_reference",
+            "fieldtype": "Data",
+            "label": "Gateway Reference",
+            "description": "Transaction reference from payment gateway"
+        },
+        {
+            "fieldname": "gateway_response",
+            "fieldtype": "Code",
+            "label": "Gateway Response",
+            "options": "JSON"
+        },
+        {
+            "fieldname": "column_break_gateway",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "callback_data",
+            "fieldtype": "Code",
+            "label": "Callback Data",
+            "options": "JSON"
+        },
+        {
+            "fieldname": "error_message",
+            "fieldtype": "Small Text",
+            "label": "Error Message"
+        },
+        {
+            "fieldname": "section_timestamps",
+            "fieldtype": "Section Break",
+            "label": "Timestamps"
+        },
+        {
+            "fieldname": "initiated_at",
+            "fieldtype": "Datetime",
+            "label": "Initiated At",
+            "default": "Now",
+            "read_only": 1
+        },
+        {
+            "fieldname": "completed_at",
+            "fieldtype": "Datetime",
+            "label": "Completed At",
+            "read_only": 1
+        },
+        {
+            "fieldname": "column_break_time",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "refunded_at",
+            "fieldtype": "Datetime",
+            "label": "Refunded At",
+            "read_only": 1
+        },
+        {
+            "fieldname": "refund_amount",
+            "fieldtype": "Currency",
+            "label": "Refund Amount"
+        }
+    ],
+    "permissions": [
+        {
+            "role": "System Manager",
+            "read": 1,
+            "write": 1,
+            "create": 1,
+            "delete": 1
+        },
+        {
+            "role": "Tenant Admin",
+            "read": 1,
+            "write": 0,
+            "create": 0,
+            "delete": 0
+        },
+        {
+            "role": "Branch Manager",
+            "read": 1,
+            "write": 0,
+            "create": 0,
+            "delete": 0
+        }
+    ],
+    "links": []
+}

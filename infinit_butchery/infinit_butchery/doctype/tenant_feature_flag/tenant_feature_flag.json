@@ -1,0 +1,116 @@
+{
+    "name": "Tenant Feature Flag",
+    "module": "Infinit Butchery",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "is_submittable": 0,
+    "istable": 0,
+    "editable_grid": 1,
+    "quick_entry": 1,
+    "track_changes": 1,
+    "naming_rule": "Expression",
+    "autoname": "format:{tenant}-{feature_code}",
+    "fields": [
+        {
+            "fieldname": "tenant",
+            "fieldtype": "Link",
+            "label": "Tenant",
+            "options": "Company",
+            "reqd": 1,
+            "in_list_view": 1,
+            "in_standard_filter": 1
+        },
+        {
+            "fieldname": "feature_code",
+            "fieldtype": "Data",
+            "label": "Feature Code",
+            "reqd": 1,
+            "in_list_view": 1,
+            "in_standard_filter": 1
+        },
+        {
+            "fieldname": "feature_name",
+            "fieldtype": "Data",
+            "label": "Feature Name",
+            "reqd": 1,
+            "in_list_view": 1
+        },
+        {
+            "fieldname": "is_enabled",
+            "fieldtype": "Check",
+            "label": "Is Enabled",
+            "default": "0",
+            "in_list_view": 1
+        },
+        {
+            "fieldname": "column_break_1",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "feature_category",
+            "fieldtype": "Select",
+            "label": "Feature Category",
+            "options": "\nCore\nStandard\nAdvanced\nBeta",
+            "default": "Standard"
+        },
+        {
+            "fieldname": "subscription_tier",
+            "fieldtype": "Select",
+            "label": "Required Tier",
+            "options": "Basic\nStandard\nPremium\nEnterprise",
+            "default": "Standard"
+        },
+        {
+            "fieldname": "section_config",
+            "fieldtype": "Section Break",
+            "label": "Configuration"
+        },
+        {
+            "fieldname": "config_json",
+            "fieldtype": "JSON",
+            "label": "Configuration",
+            "description": "Feature-specific configuration in JSON format"
+        },
+        {
+            "fieldname": "section_metadata",
+            "fieldtype": "Section Break",
+            "label": "Metadata"
+        },
+        {
+            "fieldname": "enabled_date",
+            "fieldtype": "Datetime",
+            "label": "Enabled Date",
+            "read_only": 1
+        },
+        {
+            "fieldname": "disabled_date",
+            "fieldtype": "Datetime",
+            "label": "Disabled Date",
+            "read_only": 1
+        },
+        {
+            "fieldname": "enabled_by",
+            "fieldtype": "Link",
+            "label": "Enabled By",
+            "options": "User",
+            "read_only": 1
+        }
+    ],
+    "permissions": [
+        {
+            "role": "System Manager",
+            "read": 1,
+            "write": 1,
+            "create": 1,
+            "delete": 1
+        },
+        {
+            "role": "Tenant Admin",
+            "read": 1,
+            "write": 0,
+            "create": 0,
+            "delete": 0
+        }
+    ],
+    "links": []
+}

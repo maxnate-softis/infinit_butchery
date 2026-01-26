@@ -1,0 +1,29 @@
+[project]
+name = "infinit_butchery"
+version = "2.0.0"
+description = "Butcheries Industry Module for Maxnate Infinit Platform"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Maxnate Africa", email = "dev@maxnate.com" }
+]
+
+dependencies = [
+    "frappe>=15.0.0",
+    "erpnext>=15.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+]
+
+[build-system]
+requires = ["flit_core>=3.4"]
+build-backend = "flit_core.buildapi"
+
+[tool.bench.frappe-dependencies]
+frappe = ">=15.0.0"
+erpnext = ">=15.0.0"
