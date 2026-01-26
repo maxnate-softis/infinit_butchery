@@ -1,6 +1,6 @@
 {
     "name": "Tenant Payment Method",
-    "module": "Infinit Butchery",
+    "module": "Butchery",
     "doctype": "DocType",
     "engine": "InnoDB",
     "is_submittable": 0,

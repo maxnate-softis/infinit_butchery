@@ -248,7 +248,7 @@
     "links": [],
     "modified": "2026-01-26 12:00:00.000000",
     "modified_by": "Administrator",
-    "module": "Infinit Butchery",
+    "module": "Butchery",
     "name": "Butchery Order",
     "naming_rule": "Expression",
     "autoname": "format:{tenant}-ORD-{YYYY}{MM}{DD}-{#####}",
