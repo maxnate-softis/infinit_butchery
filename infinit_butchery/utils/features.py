@@ -1,5 +1,6 @@
 """
-Feature flags utilities for Infinit Butchery
+Feature flags utilities for Infinit Butchery v3.0
+Simplified to 5 core feature flags per the v3.0 architecture
 """
 
 import frappe
@@ -8,81 +9,99 @@ import functools
 from .tenant import get_current_tenant
 
 
-# Default feature configurations
-CORE_FEATURES = {
-    "product_management": {"default": True, "description": "Basic product catalog management"},
-    "pos_sales": {"default": True, "description": "Point of sale functionality"},
-    "basic_inventory": {"default": True, "description": "Stock tracking and management"},
-    "customer_management": {"default": True, "description": "Customer database and history"},
-    "basic_reporting": {"default": True, "description": "Sales and inventory reports"},
+# ===========================================
+# V3.0 SIMPLIFIED FEATURE FLAGS
+# Only 5 core flags - everything else uses ERPNext standard config
+# ===========================================
+
+# Company-level feature flags (tenant-scoped)
+COMPANY_FEATURES = {
+    "enable_butchery_module": {
+        "field": "custom_enable_butchery_module",
+        "default": True,
+        "description": "Master switch for butchery module"
+    },
+    "weight_pricing": {
+        "field": "custom_enable_weight_pricing",
+        "default": True,
+        "description": "Sell by weight with scale integration"
+    },
+    "batch_tracing": {
+        "field": "custom_enable_batch_tracing",
+        "default": True,
+        "description": "Full carcass-to-sale traceability"
+    },
+    "online_store": {
+        "field": "custom_enable_online_store",
+        "default": False,
+        "description": "Website + e-commerce functionality"
+    },
 }
 
-STANDARD_FEATURES = {
-    "carcass_tracking": {"default": False, "description": "Track whole carcass receipts"},
-    "cutting_yield": {"default": False, "description": "Track yield percentages"},
-    "batch_traceability": {"default": True, "description": "Full batch-to-sale traceability"},
-    "cold_chain_monitoring": {"default": False, "description": "Temperature logging"},
-    "weight_based_pricing": {"default": True, "description": "Sell by weight with scale"},
-    "online_ordering": {"default": False, "description": "E-commerce website"},
-    "delivery_management": {"default": False, "description": "Delivery zones and tracking"},
-    "wholesale_pricing": {"default": False, "description": "B2B customer tiers"},
-    "processing_orders": {"default": False, "description": "Value-add processing"},
-    "multi_outlet": {"default": False, "description": "Multiple branches"},
-    "loyalty_program": {"default": False, "description": "Customer points"},
-    "halal_tracking": {"default": False, "description": "Halal certification"},
-    "scale_integration": {"default": False, "description": "Hardware scale"},
+# Business type affects which features are available
+BUSINESS_TYPES = {
+    "Retail": {
+        "description": "Single retail shop",
+        "default_features": ["weight_pricing"]
+    },
+    "Wholesale": {
+        "description": "B2B distribution",
+        "default_features": ["weight_pricing", "batch_tracing"]
+    },
+    "Processing": {
+        "description": "Meat processing facility",
+        "default_features": ["weight_pricing", "batch_tracing"]
+    },
+    "Online": {
+        "description": "E-commerce focused",
+        "default_features": ["weight_pricing", "online_store"]
+    },
+    "Multi-Outlet": {
+        "description": "Multiple branches",
+        "default_features": ["weight_pricing", "batch_tracing"]
+    }
 }
 
-ADVANCED_FEATURES = {
-    "advanced_analytics": {"tier": "Premium", "description": "AI-powered insights"},
-    "api_access": {"tier": "Business", "description": "External API"},
-    "white_label": {"tier": "Enterprise", "description": "Remove branding"},
-    "custom_workflows": {"tier": "Enterprise", "description": "Custom approvals"},
-    "multi_currency": {"tier": "Business", "description": "Multiple currencies"},
-    "franchise_management": {"tier": "Enterprise", "description": "Franchise features"},
-}
+
+def get_company_feature(feature_code: str, company: str = None) -> bool:
+    """Check if a feature is enabled for a company (v3.0 simplified)"""
+    if feature_code not in COMPANY_FEATURES:
+        return False
+    
+    company = company or frappe.defaults.get_user_default("Company")
+    if not company:
+        return COMPANY_FEATURES[feature_code]["default"]
+    
+    field = COMPANY_FEATURES[feature_code]["field"]
+    value = frappe.db.get_value("Company", company, field)
+    
+    if value is None:
+        return COMPANY_FEATURES[feature_code]["default"]
+    
+    return bool(value)
 
 
 def is_feature_enabled(feature_code: str, tenant: str = None) -> bool:
-    """Check if a feature is enabled for the current/specified tenant"""
-    tenant = tenant or get_current_tenant()
+    """Check if a feature is enabled (v3.0 - uses Company custom fields)"""
+    # Master switch must be on
+    if feature_code != "enable_butchery_module":
+        if not get_company_feature("enable_butchery_module", tenant):
+            return False
     
-    # Core features are always enabled
-    if feature_code in CORE_FEATURES:
-        return True
-    
-    if not tenant:
-        # Return default for standard features
-        if feature_code in STANDARD_FEATURES:
-            return STANDARD_FEATURES[feature_code]["default"]
-        return False
-    
-    # Check tenant feature flag
-    flag = frappe.db.get_value(
-        "Tenant Feature Flag",
-        {"tenant": tenant, "feature_code": feature_code},
-        ["enabled_by_platform", "enabled_by_tenant"],
-        as_dict=True
-    )
-    
-    if not flag:
-        # Return default if no flag exists
-        if feature_code in STANDARD_FEATURES:
-            return STANDARD_FEATURES[feature_code]["default"]
-        return False
-    
-    # Feature must be enabled by BOTH platform AND tenant
-    return flag.enabled_by_platform and flag.enabled_by_tenant
+    return get_company_feature(feature_code, tenant)
 
 
 def require_feature(feature_code: str):
-    """Decorator to require a feature for an API endpoint"""
+    """Decorator to require a feature for an API endpoint (v3.0)"""
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             if not is_feature_enabled(feature_code):
+                feature_name = COMPANY_FEATURES.get(feature_code, {}).get(
+                    "description", feature_code
+                )
                 frappe.throw(
-                    _("Feature '{0}' is not enabled for your subscription").format(feature_code),
+                    _("Feature is not enabled for your business"),
                     frappe.PermissionError
                 )
             return func(*args, **kwargs)
@@ -90,111 +109,71 @@ def require_feature(feature_code: str):
     return decorator
 
 
+def get_business_type(company: str = None) -> str:
+    """Get the business type for a company"""
+    company = company or frappe.defaults.get_user_default("Company")
+    if not company:
+        return "Retail"
+    
+    return frappe.db.get_value("Company", company, "custom_butchery_business_type") or "Retail"
+
+
 @frappe.whitelist()
 def get_tenant_features(tenant: str = None):
-    """Get all features and their status for a tenant"""
-    tenant = tenant or get_current_tenant()
+    """Get all features and their status for a tenant (v3.0 simplified)"""
+    company = tenant or frappe.defaults.get_user_default("Company")
+    business_type = get_business_type(company)
     
     features = {}
     
-    # Add core features (always enabled)
-    for code, config in CORE_FEATURES.items():
+    for code, config in COMPANY_FEATURES.items():
         features[code] = {
-            "enabled": True,
-            "category": "core",
+            "enabled": is_feature_enabled(code, company),
             "description": config["description"],
-            "configurable": False
-        }
-    
-    # Add standard features
-    for code, config in STANDARD_FEATURES.items():
-        features[code] = {
-            "enabled": is_feature_enabled(code, tenant),
-            "category": "standard",
-            "description": config["description"],
-            "configurable": True,
+            "field": config["field"],
             "default": config["default"]
         }
     
-    # Add advanced features
-    for code, config in ADVANCED_FEATURES.items():
-        features[code] = {
-            "enabled": is_feature_enabled(code, tenant),
-            "category": "advanced",
-            "description": config["description"],
-            "tier": config["tier"],
-            "configurable": False
-        }
-    
-    return features
+    return {
+        "features": features,
+        "business_type": business_type,
+        "total_enabled": sum(1 for f in features.values() if f["enabled"])
+    }
 
 
 @frappe.whitelist()
 def set_tenant_feature(tenant: str, feature_code: str, enabled: bool):
-    """Super Admin: Enable/disable feature for a tenant"""
+    """Super Admin: Enable/disable feature for a tenant (v3.0)"""
     from .tenant import is_super_admin
     
     if not is_super_admin():
         frappe.throw(_("Only Super Admins can manage tenant features"))
     
-    # Check if flag exists
-    existing = frappe.db.exists(
-        "Tenant Feature Flag",
-        {"tenant": tenant, "feature_code": feature_code}
-    )
+    if feature_code not in COMPANY_FEATURES:
+        frappe.throw(_("Unknown feature"))
     
-    if existing:
-        frappe.db.set_value(
-            "Tenant Feature Flag",
-            existing,
-            {
-                "enabled_by_platform": enabled,
-                "enabled_date": frappe.utils.now() if enabled else None,
-                "disabled_date": None if enabled else frappe.utils.now()
-            }
-        )
-    else:
-        flag = frappe.get_doc({
-            "doctype": "Tenant Feature Flag",
-            "tenant": tenant,
-            "feature_code": feature_code,
-            "enabled_by_platform": enabled,
-            "enabled_by_tenant": enabled,  # Auto-enable for tenant too
-            "enabled_date": frappe.utils.now() if enabled else None
-        })
-        flag.insert(ignore_permissions=True)
-    
+    field = COMPANY_FEATURES[feature_code]["field"]
+    frappe.db.set_value("Company", tenant, field, 1 if enabled else 0)
     frappe.db.commit()
-    return {"success": True}
+    
+    return {"success": True, "feature": feature_code, "enabled": enabled}
 
 
-@frappe.whitelist()
+# Legacy compatibility - map old feature codes to new v3.0 codes
+LEGACY_FEATURE_MAP = {
+    "batch_traceability": "batch_tracing",
+    "weight_based_pricing": "weight_pricing",
+    "online_ordering": "online_store",
+    "carcass_tracking": "batch_tracing",
+    "cutting_yield": "batch_tracing",
+}
+
+
 def configure_tenant_feature(feature_code: str, enabled: bool, config: dict = None):
-    """Tenant Admin: Configure an enabled feature"""
-    tenant = get_current_tenant()
-    
-    if not tenant:
-        frappe.throw(_("Tenant context required"))
-    
-    # Check if platform has enabled this feature
-    platform_enabled = frappe.db.get_value(
-        "Tenant Feature Flag",
-        {"tenant": tenant, "feature_code": feature_code},
-        "enabled_by_platform"
+    """Legacy compatibility wrapper"""
+    new_code = LEGACY_FEATURE_MAP.get(feature_code, feature_code)
+    return set_tenant_feature(
+        frappe.defaults.get_user_default("Company"),
+        new_code,
+        enabled
     )
-    
-    if not platform_enabled:
-        frappe.throw(_("Feature '{0}' is not available for your subscription").format(feature_code))
-    
-    # Update tenant configuration
-    frappe.db.set_value(
-        "Tenant Feature Flag",
-        {"tenant": tenant, "feature_code": feature_code},
-        {
-            "enabled_by_tenant": enabled,
-            "configuration": frappe.as_json(config) if config else None
-        }
-    )
-    
-    frappe.db.commit()
-    return {"success": True}
