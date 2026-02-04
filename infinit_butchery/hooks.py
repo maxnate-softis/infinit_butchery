@@ -39,15 +39,35 @@ app_include_js = "/assets/infinit_butchery/js/butchery.js"
 # Desk Notifications
 notification_config = "infinit_butchery.notifications.get_notification_config"
 
-# Permissions
+# Permissions - Tenant Isolation (READ protection)
+# ------------------------------------------------
+# These conditions filter all list/report queries by tenant,
+# preventing users from READING other tenants' data.
+# ALL 8 DocTypes must be covered for complete isolation.
 permission_query_conditions = {
-    "Butchery Order": "infinit_butchery.permissions.order_query",
-    "Payment Transaction": "infinit_butchery.permissions.payment_query",
+    # Core Order DocTypes
+    "Butchery Order": "infinit_butchery.utils.permissions.order_query",
+    "Butchery Order Item": "infinit_butchery.utils.permissions.order_item_query",
+    # Inventory DocTypes
+    "Meat Category": "infinit_butchery.utils.permissions.meat_category_query",
+    # Delivery DocTypes
+    "Delivery Zone": "infinit_butchery.utils.permissions.delivery_zone_query",
+    # Payment DocTypes
+    "Payment Gateway": "infinit_butchery.utils.permissions.payment_gateway_query",
+    "Payment Transaction": "infinit_butchery.utils.permissions.payment_query",
+    "Tenant Payment Method": "infinit_butchery.utils.permissions.tenant_payment_method_query",
+    # Feature Flag DocTypes
+    "Tenant Feature Flag": "infinit_butchery.utils.permissions.tenant_feature_flag_query",
 }
 
 has_permission = {
-    "Butchery Order": "infinit_butchery.permissions.has_order_permission",
-    "Payment Transaction": "infinit_butchery.permissions.has_payment_permission",
+    "Butchery Order": "infinit_butchery.utils.permissions.has_order_permission",
+    "Meat Category": "infinit_butchery.utils.permissions.has_meat_category_permission",
+    "Delivery Zone": "infinit_butchery.utils.permissions.has_delivery_zone_permission",
+    "Payment Gateway": "infinit_butchery.utils.permissions.has_payment_gateway_permission",
+    "Payment Transaction": "infinit_butchery.utils.permissions.has_payment_permission",
+    "Tenant Payment Method": "infinit_butchery.utils.permissions.has_tenant_payment_method_permission",
+    "Tenant Feature Flag": "infinit_butchery.utils.permissions.has_tenant_feature_flag_permission",
 }
 
 # Document Events (v3.0 simplified)
